@@ -4,6 +4,108 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HeroTester {
+    public class Hero {
+        private String name;
+        private int hitPoints;
+        private static final int Max_HP = 100;
+        private static final int Attack_DAM  =10;
+
+public Hero(String name){
+    this.name = name;
+    this.hitPoints = Max_HP;
+}
+
+public String getName(){
+    return this.name;
+}
+
+public int getHitPoints(){
+    return this.hitPoints;
+}
+
+public String toString() {
+    return "Hero{name='" + name + "', hitPoints=" + hitPoints + "}";
+}
+
+
+public void attack(Hero opponent) {
+    double rand = Math.random();
+    if (rand < 0.5) {
+        opponent.hitPoints = Math.max(0, opponent.hitPoints - Attack_DAM);
+    } else {
+        this.hitPoints = Math.max(0, this.hitPoints - Attack_DAM);
+    }
+}
+
+public void senzuBean(){
+    this.hitPoints = Max_HP;
+}
+
+private void fightUntilTheDeathHelper(Hero opponent){
+    while (this.hitPoints > 0 && opponent.hitPoints > 0){
+        this.attack(opponent);
+    }
+}
+
+public String fightUntilTheDeath(Hero opponent){
+    this.senzuBean();
+    opponent.senzuBean();
+    fightUntilTheDeathHelper(opponent);
+    return this.name + " has " + this.hitPoints + " hit points remaining. " +
+            opponent.name + " has " + opponent.hitPoints + " hit points remaining.";
+}
+
+private int[] nFightsToTheDeathHelper(Hero opponent, int n) {
+int thisWins = 0;
+int opponentWins = 0;
+for(int i = 0;i<n;i++){
+    this.senzuBean();
+    opponent.senzuBean();
+    fightUntilTheDeathHelper(opponent);
+    if(this.hitPoints > 0){
+        thisWins++;}
+    else{
+        opponentWins++;
+}}
+
+return new int[]{thisWins, opponentWins};
+
+}
+        public String nFightsToTheDeath(Hero opponent, int n) {
+            int[] results = nFightsToTheDeathHelper(opponent, n);
+            int thisWins = results[0];
+            int opponentWins = results[1];
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(this.name).append(": ").append(thisWins).append(" wins\n");
+            sb.append(opponent.name).append(": ").append(opponentWins).append(" wins\n");
+
+            if (thisWins > opponentWins) {
+                sb.append(this.name).append(" wins!");
+            } else if (opponentWins > thisWins) {
+                sb.append(opponent.name).append(" wins!");
+            } else {
+                sb.append("OMG! It was actually a draw!");
+            }
+
+            return sb.toString();
+        }
+
+
+
+    public void dramaticFightToTheDeath(Hero opponent) {
+        this.senzuBean();
+        opponent.senzuBean();
+        System.out.println("Dramatic fight between " + this.name + " and " + opponent.name + " begins!");
+
+        while (this.hitPoints > 0 && opponent.hitPoints > 0) {
+            this.attack(opponent);
+            System.out.println(this.name + " has " + this.hitPoints + " hit points. " +
+                    opponent.name + " has " + opponent.hitPoints + " hit points.");
+        }
+
+    }
+    }
 
     private Hero hero1;
     private Hero hero2;
